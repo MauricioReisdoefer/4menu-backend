@@ -1,0 +1,4 @@
+flask
+werkzeug.security
+pytest
+flask_sqlalchemy
