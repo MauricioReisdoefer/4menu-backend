@@ -12,3 +12,4 @@ class MenuModel(db.Model):
     )
 
     restaurant = db.relationship("RestaurantModel", back_populates="menus")
+    dishes = db.relationship("DishModel", back_populates="menu", cascade="all, delete") 
