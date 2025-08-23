@@ -2,7 +2,7 @@ import pytest
 from flask import Flask
 from db import db
 from models.restaurant_model import RestaurantModel
-from routes.restaurant_routes import restaurant_bp
+from routes import restaurant_bp
 
 
 @pytest.fixture
