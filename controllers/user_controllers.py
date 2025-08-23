@@ -8,16 +8,25 @@ from datetime import timedelta
 
 user_bp = Blueprint("users", __name__, url_prefix="/users")
 
+
 # Criar usuário
 @user_bp.route("/create", methods=["POST"])
 def create_user():
     data = request.get_json() or {}
+    name = data.get("name")
+    email = data.get("email")
+    password = data.get("password")
+
+    if not name or not email or not password:
+        return jsonify({"error": "name, email e password são obrigatórios"}), 400
+
     try:
         user = UserModel(
-            name=data["name"].strip(),
-            email=UserModel.normalize_email(data["email"]),
+            name=name.strip(),
+            email=UserModel.normalize_email(email),
+            password=password
         )
-        user.set_password(data["password"])  
+        user.set_password(password)
         db.session.add(user)
         db.session.commit()
         return jsonify(user.to_dict()), 201
@@ -43,7 +52,6 @@ def login():
     if not user or not user.check_password(password):
         return jsonify({"error": "Credenciais inválidas"}), 401
 
-    # identity = id do usuário
     access_token = create_access_token(
         identity=str(user.id),
         expires_delta=timedelta(hours=8)
@@ -80,9 +88,9 @@ def update_user(user_id):
         return jsonify({"error": "User not found"}), 404
 
     data = request.get_json() or {}
-    if "name" in data and data["name"] is not None:
+    if "name" in data and data["name"]:
         user.name = data["name"].strip()
-    if "email" in data and data["email"] is not None:
+    if "email" in data and data["email"]:
         user.email = UserModel.normalize_email(data["email"])
     if "password" in data and data["password"]:
         user.set_password(data["password"])
