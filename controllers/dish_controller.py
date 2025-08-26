@@ -1,8 +1,12 @@
-from flask import request, jsonify
+from flask import Blueprint, request, jsonify
 from db import db
 from models.dish_model import DishModel
 
+dish_bp = Blueprint("dishes", __name__, url_prefix="/dishes")
 
+
+# GET all dishes
+@dish_bp.route("/", methods=["GET"])
 def get_dishes():
     dishes = DishModel.query.all()
     return jsonify([
@@ -15,6 +19,9 @@ def get_dishes():
         } for dish in dishes
     ]), 200
 
+
+# GET dish by id
+@dish_bp.route("/<int:dish_id>", methods=["GET"])
 def get_dish(dish_id):
     dish = DishModel.query.get(dish_id)
     if not dish:
@@ -27,6 +34,9 @@ def get_dish(dish_id):
         "menu_id": dish.menu_id,
     }), 200
 
+
+# CREATE dish
+@dish_bp.route("/", methods=["POST"])
 def create_dish():
     data = request.get_json()
     if not data or "name" not in data or "price" not in data or "menu_id" not in data:
@@ -43,6 +53,9 @@ def create_dish():
 
     return jsonify({"message": "Dish created", "id": new_dish.id}), 201
 
+
+# UPDATE dish
+@dish_bp.route("/<int:dish_id>", methods=["PUT"])
 def update_dish(dish_id):
     dish = DishModel.query.get(dish_id)
     if not dish:
@@ -57,6 +70,9 @@ def update_dish(dish_id):
     db.session.commit()
     return jsonify({"message": "Dish updated"}), 200
 
+
+# DELETE dish
+@dish_bp.route("/<int:dish_id>", methods=["DELETE"])
 def delete_dish(dish_id):
     dish = DishModel.query.get(dish_id)
     if not dish:
