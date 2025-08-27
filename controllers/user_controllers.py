@@ -122,3 +122,20 @@ def delete_user(user_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 400
+    
+# Buscar restaurantes do usuário logado
+@user_bp.route("/my_restaurants", methods=["GET"])
+@jwt_required()
+def get_my_restaurants():
+    current_user_id = int(get_jwt_identity())
+    user = UserModel.query.get(current_user_id)
+
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    restaurants = [
+        {"id": r.id, "name": r.name}
+        for r in user.restaurants
+    ]
+
+    return jsonify({"restaurants": restaurants}), 200
