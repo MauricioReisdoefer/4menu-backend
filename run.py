@@ -1,11 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 from db import db
-from controllers.menu_controller import menu_bp
-from controllers.dish_controller import dish_bp
-from controllers.restaurant_controller import restaurant_bp
 from controllers.user_controllers import user_bp
-from controllers.favorite_controller import favorite_bp
 
 def create_app():
     app = Flask(__name__)
@@ -15,11 +11,7 @@ def create_app():
 
     db.init_app(app)
     CORS(app)  
-    app.register_blueprint(menu_bp)
-    app.register_blueprint(dish_bp)
-    app.register_blueprint(restaurant_bp)
     app.register_blueprint(user_bp)
-    app.register_blueprint(favorite_bp)
     return app
 
 

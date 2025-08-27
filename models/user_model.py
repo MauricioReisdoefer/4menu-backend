@@ -15,9 +15,6 @@ class UserModel(db.Model):
         onupdate=db.func.now(),
         nullable=False
     )
-    
-    restaurants = db.relationship("RestaurantModel", back_populates="owner", cascade="all, delete-orphan")
-
     def __init__(self, name: str, email: str, password: str, **kwargs):
         super().__init__(**kwargs)
         self.name = name.strip()
