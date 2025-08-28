@@ -39,14 +39,14 @@ def create_user():
 @user_bp.route("/login", methods=["POST"])
 def login():
     data = request.get_json() or {}
-    email = data.get("email")
+    username = data.get("username")
     password = data.get("password")
 
-    if not email or not password:
+    if not username or not password:
         return jsonify({"error": "email e password são obrigatórios"}), 400
 
     user = UserModel.query.filter_by(
-        email=UserModel.normalize_email(email)
+        name=username
     ).first()
 
     if not user or not user.check_password(password):
