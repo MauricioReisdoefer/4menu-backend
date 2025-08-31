@@ -4,6 +4,7 @@ from db import db
 from routes.user_routes import user_bp
 from routes.restaurant_routes import restaurant_bp
 from routes.secao_routes import secao_bp
+from routes.item_routes import item_bp
 from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
 import os
@@ -20,6 +21,7 @@ def create_app():
     app.register_blueprint(user_bp)
     app.register_blueprint(restaurant_bp)
     app.register_blueprint(secao_bp)
+    app.register_blueprint(item_bp)
     return app
 
 if __name__ == "__main__":
