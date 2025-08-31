@@ -6,7 +6,7 @@ from models.user_model import User
 # ---------------------------
 # Tabela JSON
 # ---------------------------
-user_table = JsonTable("users.json", User)
+user_table = JsonTable("tables/users.json", User)
 user_querier = JsonQuerier(user_table)
 
 # Criar usuário
@@ -33,13 +33,13 @@ def create_user():
 # Login
 def login():
     data = request.get_json() or {}
-    email = data.get("email")
+    username = data.get("name")
     password = data.get("password")
 
-    if not email or not password:
-        return jsonify({"error": "email e password são obrigatórios"}), 400
+    if not username or not password:
+        return jsonify({"error": "name e password são obrigatórios"}), 400
 
-    user = user_querier.get_first(email=email.strip().lower())
+    user = user_querier.get_first(name=username.strip().lower())
     if not user or not user.check_password(password):
         return jsonify({"error": "Credenciais inválidas"}), 401
 

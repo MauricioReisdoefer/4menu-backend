@@ -26,5 +26,5 @@ class User:
 # ---------------------------
 # Tabela JSON
 # ---------------------------
-user_table = JsonTable("users.json", User)
+user_table = JsonTable("table/users.json", User)
 user_querier = JsonQuerier(user_table)

@@ -14,13 +14,10 @@ def create_app():
     app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
     jwt = JWTManager(app)
         
-    db.init_app(app)
     CORS(app)  
     app.register_blueprint(user_bp)
     return app
 
 if __name__ == "__main__":
     app = create_app()
-    with app.app_context():
-        db.create_all()
     app.run(debug=True, host="0.0.0.0", port=5000)
