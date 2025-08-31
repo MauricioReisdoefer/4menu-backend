@@ -1,44 +1,30 @@
-from db import db
+from dataclasses import dataclass, field
+from datetime import datetime
+from typing import Optional
 from werkzeug.security import generate_password_hash, check_password_hash
+from jsonlite import JsonTable, JsonQuerier
 
-class UserModel(db.Model):
-    __tablename__ = "users"
+# ---------------------------
+# Modelo de Usuário
+# ---------------------------
+@dataclass
+class User:
+    _id: Optional[int] = field(default=None)
+    name: str = ""
+    email: str = ""
+    password_hash: str = ""
+    created_at: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+    updated_at: str = field(default_factory=lambda: datetime.utcnow().isoformat())
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), nullable=False)
-    email = db.Column(db.String(255), nullable=False, unique=True, index=True)
-    password_hash = db.Column(db.String(255), nullable=False)
-    created_at = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
-    updated_at = db.Column(
-        db.DateTime,
-        server_default=db.func.now(),
-        onupdate=db.func.now(),
-        nullable=False
-    )
-    def __init__(self, name: str, email: str, password: str, **kwargs):
-        super().__init__(**kwargs)
-        self.name = name.strip()
-        self.email = self.normalize_email(email)
-        self.set_password(password)
-
-    @staticmethod
-    def normalize_email(email: str) -> str:
-        return email.strip().lower()
-
-    def set_password(self, password: str) -> None:
+    def set_password(self, password: str):
         self.password_hash = generate_password_hash(password)
+        self.updated_at = datetime.utcnow().isoformat()
 
     def check_password(self, password: str) -> bool:
         return check_password_hash(self.password_hash, password)
 
-    def to_dict(self) -> dict:
-        return {
-            "id": self.id,
-            "name": self.name,
-            "email": self.email,
-            "created_at": self.created_at.isoformat() if self.created_at else None,
-            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
-        }
-
-    def __repr__(self) -> str:
-        return f"<User {self.id} - {self.email}>"
+# ---------------------------
+# Tabela JSON
+# ---------------------------
+user_table = JsonTable("users.json", User)
+user_querier = JsonQuerier(user_table)
