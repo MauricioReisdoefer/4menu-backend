@@ -93,3 +93,16 @@ def delete_user(user_id):
 
     user_table.flush()
     return jsonify({"message": "User deleted"}), 200
+
+@jwt_required()
+def viewme():
+    # Pega o ID do usuário da JWT
+    current_user_id = int(get_jwt_identity())
+
+    # Busca o usuário na tabela
+    user = user_querier.get_first(_id=current_user_id)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    # Retorna o usuário como JSON
+    return jsonify(user.__dict__), 200

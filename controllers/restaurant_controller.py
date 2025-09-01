@@ -3,6 +3,7 @@ from datetime import datetime
 from jsonlite import JsonQuerier, JsonTable
 from typing import Optional
 from models.restaurant_model import Restaurant
+from dataclasses import asdict
 
 restaurant_table = JsonTable("tables/restaurants.json", Restaurant)
 restaurant_querier = JsonQuerier(restaurant_table)
@@ -39,9 +40,12 @@ def get_restaurant_by_id(_id: int) -> Optional[Restaurant]:
     results = restaurant_table.get_by("_id", _id)
     return results
 
-def get_restaurants(limit: int) -> list[Restaurant]:
+def get_restaurants(limit: int):
         all_restaurants = restaurant_table.get_all()
-        return all_restaurants[:limit] if limit > 0 else all_restaurants
+        list = []
+        for rest in all_restaurants:
+            list.append(asdict(rest))
+        return list
     
 @jwt_required()
 def update_restaurant(_id: int, **kwargs) -> bool:

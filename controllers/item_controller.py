@@ -1,4 +1,6 @@
+from dataclasses import asdict
 from models.item_model import Item, item_table, item_querier
+from flask import jsonify
 
 # ---------------------------
 # Criar Item
@@ -22,3 +24,12 @@ def deletar_item(item_id: int) -> bool:
         return False
     item_table.delete(item[0])
     return True
+
+def get_item(secao_id: int):
+    itens = item_querier.filter(section_id=secao_id)  # melhor usar 'filter' se suportado
+    lista = [asdict(item) for item in itens]
+
+    if lista:  # lista não vazia
+        return jsonify(lista), 200
+    else:  # lista vazia
+        return jsonify({"message": "Nenhum item encontrado"}), 404

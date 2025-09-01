@@ -1,3 +1,4 @@
+from dataclasses import asdict
 from models.secao_model import Secao, secao_table, secao_querier
 # ---------------------------
 # Criar Seção
@@ -16,3 +17,10 @@ def deletar_secao(secao_id: int) -> bool:
         return False
     secao_table.delete(secao[0])
     return True
+
+def get_secao(rest_id: int):
+    secoes = secao_querier.filter(restaurant_id=rest_id)
+    lista = []
+    for section in secoes:
+        lista.append(asdict(section))
+    return secoes
