@@ -1,13 +1,13 @@
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Optional
-from jsonlite import JsonTable, JsonQuerier
+from fastjson_db import JsonTable, JsonQuerier, JsonModel
 
 # ---------------------------
 # Modelo da Seção
 # ---------------------------
 @dataclass
-class Secao:
+class Secao(JsonModel):
     _id: Optional[int] = field(default=None)
     title: str = ""
     restaurant_id: int = 0

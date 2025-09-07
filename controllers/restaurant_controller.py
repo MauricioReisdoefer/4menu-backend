@@ -1,9 +1,10 @@
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import datetime
-from jsonlite import JsonQuerier, JsonTable
+from fastjson_db import JsonQuerier, JsonTable
 from typing import Optional
 from models.restaurant_model import Restaurant
 from dataclasses import asdict
+from flask import request
 
 restaurant_table = JsonTable("tables/restaurants.json", Restaurant)
 restaurant_querier = JsonQuerier(restaurant_table)
@@ -13,15 +14,21 @@ restaurant_querier = JsonQuerier(restaurant_table)
 # ---------------------------
 
 @jwt_required()
-def create_restaurant(name: str, email: str, password: str, primary_color: str = "000000", secondary_color: str = "000000") -> int:
+def create_restaurant() -> int:
     user_id = get_jwt_identity()
+    data = request.get_json()
+
+    name = data.get("name")
+    email = data.get("email")
+    password = data.get("password")
+
+    if not name or not email or not password:
+        raise ValueError("name, email e password são obrigatórios.")
 
     rest = Restaurant(
         owner_id=user_id,
         name=name,
         email=email,
-        primary_color=primary_color,
-        secondary_color=secondary_color
     )
     rest.set_password(password)
 

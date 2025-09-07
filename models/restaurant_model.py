@@ -2,20 +2,18 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Optional
 from werkzeug.security import generate_password_hash, check_password_hash
-from jsonlite import JsonTable, JsonQuerier
+from fastjson_db import JsonTable, JsonQuerier, JsonModel
 
 # ---------------------------
 # Modelo de Restaurante
 # ---------------------------
 @dataclass
-class Restaurant:
+class Restaurant(JsonModel):
     _id: Optional[int] = field(default=None)
     owner_id: int = 0
     layout: int = 0
     name: str = ""
     email: str = ""
-    primary_color: str = "000000"
-    secondary_color: str = "000000"
     password_hash: str = ""
     created_at: str = field(default_factory=lambda: datetime.utcnow().isoformat())
     updated_at: str = field(default_factory=lambda: datetime.utcnow().isoformat())

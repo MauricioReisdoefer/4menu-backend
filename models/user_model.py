@@ -2,13 +2,13 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Optional
 from werkzeug.security import generate_password_hash, check_password_hash
-from jsonlite import JsonTable, JsonQuerier
+from fastjson_db import JsonTable, JsonQuerier, JsonModel
 
 # ---------------------------
 # Modelo de Usuário
 # ---------------------------
 @dataclass
-class User:
+class User(JsonModel):
     _id: Optional[int] = field(default=None)
     name: str = ""
     email: str = ""

@@ -2,5 +2,5 @@ flask
 werkzeug.security
 pytest
 flask_sqlalchemy
-fastjson-db==0.1.0
+fastjson-db==0.3.5
 python-dotenv

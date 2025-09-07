@@ -1,6 +1,6 @@
 from flask import request, jsonify
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
-from jsonlite import JsonTable, JsonQuerier
+from fastjson_db import JsonTable, JsonQuerier
 from models.user_model import User
 
 # ---------------------------
